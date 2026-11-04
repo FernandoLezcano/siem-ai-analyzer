@@ -1,0 +1,17 @@
+# Entorno virtual
+venv/
+env/
+
+# Variables de entorno (¡CRÍTICO! No subir API Keys)
+.env
+
+# Python
+__pycache__/
+*.pyc
+
+# Datos locales (Opcional, si no quieres subir los excels de prueba)
+data/*.xlsx
+
+# PDFs generados localmente
+*.pdf
+test_report.pdf

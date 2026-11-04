@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe de Seguridad</title>
+    <style>
+        @page { size: A4; margin: 2cm; }
+        body { font-family: 'Helvetica', Arial, sans-serif; color: #1a1a1a; line-height: 1.5; }
+        .cover { text-align: center; padding-top: 6cm; }
+        .cover h1 { color: #0f172a; font-size: 32px; }
+        .cover p { color: #475569; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; color: #fff; font-weight: bold; font-size: 12px; }
+        .critical { background: #dc2626; }
+        .high { background: #ea580c; }
+        .medium { background: #ca8a04; }
+        .low { background: #16a34a; }
+        h2 { color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; margin-top: 28px; }
+        
+        /* Estilos para las tablas de evidencias (CORREGIDOS) */
+        table.styled-table {
+            width: 100%;
+            table-layout: fixed; /* Forza a que las columnas no se salgan */
+            border-collapse: collapse;
+            font-size: 8px; /* Letra más pequeña para que quepa todo */
+            margin-top: 8px;
+            word-wrap: break-word; /* Rompe palabras largas (como IPs o comandos) */
+        }
+        
+        table.styled-table th, 
+        table.styled-table td {
+            border: 1px solid #cbd5e1;
+            padding: 4px;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        table.styled-table th {
+            background-color: #0f172a;
+            color: white;
+            font-weight: bold;
+        }
+
+        .finding { border-left: 4px solid #0f172a; padding: 8px 14px; margin: 14px 0; background: #f8fafc; }
+        .finding h3 { margin: 0 0 6px 0; font-size: 15px; }
+        .page-break { page-break-before: always; }
+    </style>
+</head>
+<body>
+
+    <!-- Portada -->
+    <div class="cover">
+        <h1>Informe Técnico de Seguridad</h1>
+        <p><strong>SIEM AI Analyzer</strong></p>
+        <p>Análisis de incidentes y correlación de logs</p>
+        <p>Generado el {{ report_date }}</p>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- Resumen ejecutivo -->
+    <h2>1. Resumen Ejecutivo</h2>
+    <p>{{ ai.executive_summary }}</p>
+    <p><strong>Estado general:</strong> 
+        {% if data.is_compromised %}
+            <span class="badge critical">COMPROMETIDO</span>
+        {% else %}
+            <span class="badge low">LIMPIO</span>
+        {% endif %}
+    </p>
+    <p><strong>Logs analizados:</strong> {{ data.total_logs_analyzed }}</p>
+    <p><strong>Hallazgos:</strong> {{ data.findings|length }} 
+        (Críticos: {{ data.summary.critical }}, Altos: {{ data.summary.high }}, Medios: {{ data.summary.medium }})
+    </p>
+
+    <!-- Hallazgos -->
+    <h2>2. Hallazgos Identificados</h2>
+    {% for f in data.findings %}
+    <div class="finding">
+        <h3>
+            {{ loop.index }}. {{ f.type }} 
+            <span class="badge {% if f.severity == 'Crítico' %}critical{% elif f.severity == 'Alto' %}high{% elif f.severity == 'Medio' %}medium{% else %}low{% endif %}">
+                {{ f.severity }}
+            </span>
+        </h3>
+        <p><strong>Evidencia:</strong> {{ f.evidence }}</p>
+        <p><strong>Justificación:</strong> {{ f.justification }}</p>
+        <p><strong>Registros afectados:</strong> {{ f.affected_records }}</p>
+    </div>
+    {% endfor %}
+
+    <!-- Explicación técnica -->
+    <div class="page-break"></div>
+    <h2>3. Explicación Técnica</h2>
+    <p>{{ ai.technical_explanation }}</p>
+
+    <!-- Evidencias (Logs crudos) -->
+    <h2>4. Evidencias encontradas en los logs</h2>
+    {% for f in data.findings %}
+    <h3>{{ f.type }}</h3>
+    {{ f.evidence_html | safe }}
+    {% endfor %}
+
+    <!-- Impacto y Plan de Acción -->
+    <div class="page-break"></div>
+    <h2>5. Criticidad y Posible Impacto en la Organización</h2>
+    <p>{{ ai.impact }}</p>
+
+    <h2>6. Plan de Acción</h2>
+    <p>{{ ai.action_plan }}</p>
+
+    <h2>7. Recomendaciones Generales de Seguridad</h2>
+    <p>{{ ai.recommendations }}</p>
+
+</body>
+</html>

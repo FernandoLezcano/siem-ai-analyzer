@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe Técnico</title>
+    <style>
+        @page { size: A4; margin: 2cm; }
+        body { font-family: 'Helvetica', Arial, sans-serif; color: #1a1a1a; line-height: 1.5; }
+        .cover { text-align: center; padding-top: 8cm; }
+        .cover h1 { color: #0f172a; font-size: 32px; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; color: #fff; font-weight: bold; font-size: 12px; }
+        .critical { background: #dc2626; }
+        .high { background: #ea580c; }
+        .medium { background: #ca8a04; }
+        .low { background: #16a34a; }
+        h2 { color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; margin-top: 28px; }
+        h3 { color: #334155; margin-top: 15px; font-size: 14px;}
+        
+        table.styled-table {
+            width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 8px; margin-top: 8px; word-wrap: break-word;
+        }
+        table.styled-table th, table.styled-table td {
+            border: 1px solid #cbd5e1; padding: 4px; text-align: left; overflow: hidden; text-overflow: ellipsis;
+        }
+        table.styled-table th { background-color: #0f172a; color: white; font-weight: bold; }
+
+        .finding { border-left: 4px solid #0f172a; padding: 8px 14px; margin: 14px 0; background: #f8fafc; }
+        .page-break { page-break-before: always; }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <h1>Informe Técnico de Seguridad</h1>
+        <p><strong>SIEM AI Analyzer</strong></p>
+        <p>Análisis Forense y Correlación de Logs</p>
+        <p>Generado el {{ report_date }}</p>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>1. Hallazgos Identificados</h2>
+    {% for f in data.findings %}
+    <div class="finding">
+        <h3>
+            {{ loop.index }}. {{ f.type }} 
+            <span class="badge {% if f.severity == 'Crítico' %}critical{% elif f.severity == 'Alto' %}high{% elif f.severity == 'Medio' %}medium{% else %}low{% endif %}">
+                {{ f.severity }}
+            </span>
+        </h3>
+        <p><strong>Evidencia:</strong> {{ f.evidence }}</p>
+        <p><strong>Justificación:</strong> {{ f.justification }}</p>
+    </div>
+    {% endfor %}
+
+    <h2>2. Explicación Técnica</h2>
+    <p>{{ ai.technical_explanation }}</p>
+
+    <div class="page-break"></div>
+    <h2>3. Evidencias Detalladas en los Logs</h2>
+    {% for f in data.findings %}
+    <h3>{{ f.type }}</h3>
+    {{ f.evidence_html | safe }}
+    {% endfor %}
+</body>
+</html>

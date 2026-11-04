@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe Ejecutivo</title>
+    <style>
+        @page { size: A4; margin: 2cm; }
+        body { font-family: 'Helvetica', Arial, sans-serif; color: #1a1a1a; line-height: 1.6; }
+        .cover { text-align: center; padding-top: 8cm; }
+        .cover h1 { color: #0f172a; font-size: 32px; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; color: #fff; font-weight: bold; font-size: 12px; }
+        .critical { background: #dc2626; }
+        .low { background: #16a34a; }
+        h2 { color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; margin-top: 28px; }
+        .page-break { page-break-before: always; }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <h1>Informe Ejecutivo de Seguridad</h1>
+        <p><strong>SIEM AI Analyzer</strong></p>
+        <p>Resumen de Incidentes y Estado de la Organización</p>
+        <p>Generado el {{ report_date }}</p>
+    </div>
+
+    <div class="page-break"></div>
+
+    <h2>1. Resumen Ejecutivo</h2>
+    <p>{{ ai.executive_summary }}</p>
+    <p><strong>Estado general:</strong> 
+        {% if data.is_compromised %}
+            <span class="badge critical">COMPROMETIDO</span>
+        {% else %}
+            <span class="badge low">LIMPIO</span>
+        {% endif %}
+    </p>
+    
+    <h2>2. Impacto en la Organización</h2>
+    <p>{{ ai.impact }}</p>
+
+    <h2>3. Plan de Acción Recomendado</h2>
+    <p>{{ ai.action_plan }}</p>
+
+    <h2>4. Recomendaciones Generales</h2>
+    <p>{{ ai.recommendations }}</p>
+</body>
+</html>
