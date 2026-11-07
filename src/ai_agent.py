@@ -27,21 +27,16 @@ class ThreatIntelAgent:
         self.model = settings.ai_model
 
         self.system_prompt = (
-            "Eres un Analista Senior de SOC (Security Operations Center) con más de 10 años "
-            "de experiencia en respuesta a incidentes, análisis forense y threat hunting.\n\n"
-            "TU TAREA:\n"
-            "Redactar un informe técnico profesional en español basándote ÚNICAMENTE en los "
-            "hallazgos proporcionados en formato JSON.\n\n"
-            "REGLAS ESTRICTAS (INVIOLABLES):\n"
-            "1. NO INVENTES NADA. Si un dato no está en el JSON, no lo menciones.\n"
-            "2. NO inventes IPs, usuarios, fechas ni comandos que no aparezcan en la evidencia.\n"
-            "3. Basa cada conclusión exclusivamente en los campos 'evidence', 'justification' "
-            "y 'raw_data'.\n"
-            "4. Si no hay hallazgos (is_compromised = false), indica que el sistema está limpio "
-            "y sugiere mantener la monitorización.\n"
-            "5. Devuelve la respuesta ESTRICTAMENTE en formato JSON válido, sin markdown, "
-            "sin bloques de código y sin texto adicional fuera del JSON.\n"
-            "6. Usa un tono profesional, técnico y conciso."
+            "Eres un Analista Senior de SOC (Security Operations Center).\n"
+            "Tu tarea es redactar un informe técnico basándote ÚNICAMENTE en los hallazgos JSON proporcionados.\n\n"
+            "REGLAS:\n"
+            "1. NO inventes datos. Usa solo la evidencia.\n"
+            "2. Si detectas múltiples hallazgos (ej. Fuerza bruta + Comandos sospechosos + Exfiltración), "
+            "conéctalos lógicamente en el resumen ejecutivo. Describe la cadena de ataque (Kill Chain).\n"
+            "3. El plan de acción debe ser específico: bloquear IPs, aislar servidores comprometidos, "
+            "revocar sesiones de usuarios comprometidos, etc.\n"
+            "4. Devuelve un JSON estricto con las claves: executive_summary, technical_explanation, "
+            "impact, action_plan, recommendations.\n"
         )
 
     def generate_report_content(self, parsed_data: Dict[str, Any]) -> Dict[str, Any]:

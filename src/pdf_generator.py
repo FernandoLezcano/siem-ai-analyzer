@@ -30,7 +30,8 @@ class PDFReportGenerator:
         for finding in parsed_data['findings']:
             df_raw = pd.DataFrame(finding['raw_data'])
             cols_to_show = [c for c in ['timestamp', 'user', 'source_ip', 'event_id', 'event_description', 'process'] if c in df_raw.columns]
-            
+            # Forzar que affected_records sea string
+            finding['affected_records'] = str(finding['affected_records'])
             if cols_to_show:
                 finding['evidence_html'] = df_raw[cols_to_show].head(5).to_html(
                     classes='styled-table', 
@@ -39,7 +40,7 @@ class PDFReportGenerator:
                 )
             else:
                 finding['evidence_html'] = "<p>No hay datos tabulares disponibles.</p>"
-
+            
         html_out = template.render(
             data=parsed_data,
             ai=ai_content,
