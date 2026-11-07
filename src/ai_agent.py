@@ -46,7 +46,7 @@ class ThreatIntelAgent:
 
         user_prompt = self._build_user_prompt(parsed_data)
 
-        # --- LÓGICA DE REINTENTO SENIOR ---
+        # --- LÓGICA DE REINTENTO ---
         max_retries = 2
         for attempt in range(max_retries):
             try:
